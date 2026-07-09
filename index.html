@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trillium Studio — Download</title>
+<meta name="description" content="Download Trillium Studio, the Trillium Academy schedule builder.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #faf6ef;
+    --paper-warm: #f3ecdf;
+    --paper-deep: #e9dfcc;
+    --ink: #1f2d24;
+    --ink-soft: #46584c;
+    --ink-faint: #7d8b80;
+    --spruce: #1e4d38;
+    --coral: #e8604c;
+    --line: #ddd2bc;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background:
+      radial-gradient(1100px 500px at 85% -10%, var(--paper-warm), transparent 65%),
+      var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    padding: 0 20px 90px;
+  }
+  .page { max-width: 880px; margin: 0 auto; }
+
+  header { display: flex; align-items: center; gap: 14px; padding: 30px 0 0; }
+  header svg { flex: none; }
+  .wordmark { font-weight: 600; letter-spacing: .01em; line-height: 1.05; }
+  .wordmark small { display: block; font-weight: 500; color: var(--ink-soft); letter-spacing: .04em; }
+
+  .hero { padding: 66px 0 8px; }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(38px, 6vw, 56px);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+  }
+  h1 em { font-style: italic; color: var(--spruce); }
+  .lede { margin-top: 16px; max-width: 56ch; color: var(--ink-soft); font-size: 17px; }
+
+  .rule { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+
+  .dl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+  @media (max-width: 700px) { .dl-grid { grid-template-columns: 1fr; } }
+  .dl {
+    display: block; text-decoration: none; color: inherit;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 20px 18px;
+    box-shadow: 0 1px 2px rgba(31,45,36,.05);
+    transition: transform .16s cubic-bezier(.2,.8,.2,1), box-shadow .16s cubic-bezier(.2,.8,.2,1), border-color .16s;
+  }
+  .dl:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(31,45,36,.10); border-color: var(--spruce); }
+  .dl .os { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  .dl .name { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--spruce); margin: 6px 0 2px; }
+  .dl .hint { font-size: 13.5px; color: var(--ink-soft); }
+  .dl .get {
+    display: inline-block; margin-top: 14px; font-weight: 600; font-size: 14px;
+    color: #fff; background: var(--spruce);
+    padding: 8px 16px; border-radius: 999px;
+  }
+  .dl:hover .get { background: var(--coral); }
+
+  .which {
+    margin-top: 14px; font-size: 13.5px; color: var(--ink-soft);
+    background: var(--paper-warm); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 14px;
+  }
+
+  h2 { font-family: var(--serif); font-weight: 600; font-size: 26px; margin-bottom: 6px; }
+  .sub { color: var(--ink-soft); font-size: 15px; max-width: 60ch; }
+
+  details {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    padding: 0; margin-top: 12px; overflow: hidden;
+  }
+  summary {
+    cursor: pointer; list-style: none; padding: 15px 18px;
+    font-weight: 600; color: var(--spruce); font-size: 15.5px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  summary::before { content: "＋"; color: var(--coral); font-weight: 600; }
+  details[open] summary::before { content: "－"; }
+  summary::-webkit-details-marker { display: none; }
+  .steps { padding: 2px 20px 18px 22px; }
+  .steps ol { padding-left: 20px; display: grid; gap: 9px; font-size: 15px; }
+  .steps li strong { color: var(--spruce); }
+  .callout {
+    margin-top: 13px; font-size: 14px;
+    border-left: 3px solid var(--coral);
+    background: var(--paper-warm);
+    padding: 10px 14px; border-radius: 0 8px 8px 0;
+    color: var(--ink-soft);
+  }
+  .callout strong { color: var(--ink); }
+
+  .quiet { margin-top: 36px; font-size: 13.5px; color: var(--ink-faint); max-width: 62ch; }
+  .quiet strong { color: var(--ink-soft); }
+
+  .hero, .section { animation: rise .5s cubic-bezier(.2,.8,.2,1) both; }
+  .section:nth-of-type(2) { animation-delay: .06s; }
+  .section:nth-of-type(3) { animation-delay: .12s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero, .section { animation-duration: .01ms; }
+    .dl { transition-duration: .01ms; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <svg width="46" height="46" viewBox="0 0 100 100" aria-hidden="true">
+      <g fill="none" stroke="#1e4d38" stroke-width="3">
+        <circle cx="50" cy="32" r="17"/><circle cx="65.6" cy="41" r="17"/>
+        <circle cx="65.6" cy="59" r="17"/><circle cx="50" cy="68" r="17"/>
+        <circle cx="34.4" cy="59" r="17"/><circle cx="34.4" cy="41" r="17"/>
+      </g>
+    </svg>
+    <div class="wordmark">trillium<small>academy</small></div>
+  </header>
+
+  <div class="hero">
+    <h1>Trillium <em>Studio</em></h1>
+    <p class="lede">The schedule-building studio for Trillium Academy.
+    Pick your computer below, install it, and open the school file Ryan
+    sends you — that one file carries everything.</p>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section">
+    <h2>Download</h2>
+    <p class="sub">These buttons always give you the newest version.</p>
+    <div class="dl-grid">
+      <a class="dl" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-Setup.exe">
+        <span class="os">Windows</span>
+        <span class="name">Windows 10 / 11</span>
+        <span class="hint">One installer, no admin password needed.</span>
+        <span class="get">Download for Windows</span>
+      </a>
+      <a class="dl" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-mac-arm64.dmg">
+        <span class="os">Mac</span>
+        <span class="name">Mac — Apple silicon</span>
+        <span class="hint">Most Macs from 2021 or newer (M1–M4 chips).</span>
+        <span class="get">Download for Mac</span>
+      </a>
+      <a class="dl" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-mac-x86_64.dmg">
+        <span class="os">Mac</span>
+        <span class="name">Mac — Intel</span>
+        <span class="hint">Older Macs, roughly 2020 and earlier.</span>
+        <span class="get">Download for Mac</span>
+      </a>
+    </div>
+    <p class="which"><strong>Not sure which Mac you have?</strong> Click the
+    Apple menu (top-left corner) → <em>About This Mac</em>. If it says
+    “Chip: Apple M1/M2/M3/M4”, choose Apple silicon. If it says “Processor:
+    Intel”, choose Intel.</p>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section">
+    <h2>Installing</h2>
+    <p class="sub">Both computers will warn you once about an app from “an
+    unidentified developer.” That’s expected — Trillium Studio is built by
+    Ryan for the school, not sold in an app store. Here’s exactly what to
+    click.</p>
+
+    <details open>
+      <summary>On Windows</summary>
+      <div class="steps">
+        <ol>
+          <li>Download and open <strong>TrilliumStudio-Setup.exe</strong>.</li>
+          <li>If a blue box says <strong>“Windows protected your PC”</strong>:
+              click <strong>More info</strong>, then <strong>Run anyway</strong>.
+              (The button is hidden until you click More info.)</li>
+          <li>Click through the installer — it takes a few seconds and puts
+              <strong>Trillium Studio</strong> on your desktop and Start menu.</li>
+          <li>Open it. Your web browser opens with the app running —
+              that’s normal; the whole thing lives on your computer.</li>
+        </ol>
+        <div class="callout"><strong>First time in the app?</strong> Click
+        <strong>Files ▾ → Open a .trillium file…</strong> (top right) and pick
+        the file Ryan sent you. Courses, rooms, teachers, students — it’s all
+        in that one file.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>On a Mac</summary>
+      <div class="steps">
+        <ol>
+          <li>Download and open the <strong>.dmg</strong>, then drag
+              <strong>Trillium Studio</strong> into <strong>Applications</strong>.</li>
+          <li>Open it from Applications. If the Mac says it
+              <strong>“cannot verify the developer”</strong>, close that message, then go to
+              <strong> → System Settings → Privacy &amp; Security</strong>,
+              scroll down, and click <strong>Open Anyway</strong>. You only do
+              this once.</li>
+          <li>Open it again. Your web browser opens with the app running —
+              that’s normal; the whole thing lives on your computer.</li>
+        </ol>
+        <div class="callout"><strong>First time in the app?</strong> Click
+        <strong>Files ▾ → Open a .trillium file…</strong> (top right) and pick
+        the file Ryan sent you. Courses, rooms, teachers, students — it’s all
+        in that one file.</div>
+      </div>
+    </details>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section">
+    <h2>Updating</h2>
+    <p class="sub">When Ryan says there’s a new version: come back to this
+    page, download the same button again, and install it over the old one.
+    Your schedules and edits are kept — they live outside the app.</p>
+
+    <p class="quiet"><strong>A note on student privacy:</strong> the installer
+    contains no student information at all. Student data enters only through
+    the .trillium file Ryan hands you directly, stays on your computer, and
+    never touches the internet — the app works entirely offline.</p>
+  </div>
+
+</div>
+</body>
+</html>
