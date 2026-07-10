@@ -28,11 +28,21 @@
     font-family: var(--sans);
     background:
       radial-gradient(1100px 500px at 85% -10%, var(--paper-warm), transparent 65%),
+      radial-gradient(900px 600px at -10% 105%, rgba(30, 77, 56, .05), transparent 60%),
       var(--paper);
     color: var(--ink);
     line-height: 1.55;
     padding: 0 20px 90px;
+    position: relative;
   }
+  /* fractal-noise grain kills gradient banding and reads tactile */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: .04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .page { position: relative; z-index: 1; }
+  h1, h2 { font-optical-sizing: auto; text-wrap: balance; }
   .page { max-width: 880px; margin: 0 auto; }
 
   header { display: flex; align-items: center; gap: 14px; padding: 30px 0 0; }
@@ -74,6 +84,18 @@
     padding: 8px 16px; border-radius: 999px;
   }
   .dl:hover .get { background: var(--coral); }
+  .dl .ver {
+    display: block; margin-top: 9px; font-size: 12px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .dl.recommended { border-color: var(--spruce); }
+  .dl.recommended::after {
+    content: 'For this computer';
+    display: inline-block; margin-top: 10px; margin-left: 8px;
+    font-size: 11px; font-weight: 600; letter-spacing: .05em;
+    text-transform: uppercase; color: var(--spruce);
+  }
+  .trust { margin-top: 14px; font-size: 14px; color: var(--ink-soft); }
 
   .which {
     margin-top: 14px; font-size: 13.5px; color: var(--ink-soft);
@@ -140,6 +162,8 @@
     <p class="lede">The schedule-building studio for Trillium Academy.
     Pick your computer below, install it, and open the school file Ryan
     sends you — that one file carries everything.</p>
+    <p class="trust">No account needed · installs in under a minute ·
+    works entirely offline</p>
   </div>
 
   <hr class="rule">
@@ -148,25 +172,55 @@
     <h2>Download</h2>
     <p class="sub">These buttons always give you the newest version.</p>
     <div class="dl-grid">
-      <a class="dl" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-Setup.exe">
+      <a class="dl" id="dl-win" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-Setup.exe">
         <span class="os">Windows</span>
         <span class="name">Windows 10 / 11</span>
         <span class="hint">One installer, no admin password needed.</span>
         <span class="get">Download for Windows</span>
+        <span class="ver" data-ver>always the newest version</span>
       </a>
-      <a class="dl" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-mac-arm64.dmg">
+      <a class="dl" id="dl-mac-arm" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-mac-arm64.dmg">
         <span class="os">Mac</span>
         <span class="name">Mac — Apple silicon</span>
         <span class="hint">Most Macs from 2021 or newer (M1–M4 chips).</span>
         <span class="get">Download for Mac</span>
+        <span class="ver" data-ver>always the newest version</span>
       </a>
-      <a class="dl" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-mac-x86_64.dmg">
+      <a class="dl" id="dl-mac-intel" href="https://github.com/ryannorris14/trillium-studio-releases/releases/latest/download/TrilliumStudio-mac-x86_64.dmg">
         <span class="os">Mac</span>
         <span class="name">Mac — Intel</span>
         <span class="hint">Older Macs, roughly 2020 and earlier.</span>
         <span class="get">Download for Mac</span>
+        <span class="ver" data-ver>always the newest version</span>
       </a>
     </div>
+    <script>
+      // fails safe: static text above works with JS off or API down
+      (function () {
+        try {
+          var p = (navigator.userAgentData && navigator.userAgentData.platform)
+            || navigator.platform || '';
+          var el = /mac/i.test(p)
+            ? document.getElementById('dl-mac-arm')
+            : /win/i.test(p) ? document.getElementById('dl-win') : null;
+          if (el) el.classList.add('recommended');
+        } catch (e) { /* never break the page */ }
+        fetch('https://api.github.com/repos/ryannorris14/trillium-studio-releases/releases/latest')
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (rel) {
+            if (!rel || !rel.tag_name) return;
+            var date = rel.published_at
+              ? new Date(rel.published_at).toLocaleDateString(undefined,
+                  { month: 'long', day: 'numeric', year: 'numeric' })
+              : '';
+            document.querySelectorAll('[data-ver]').forEach(function (s) {
+              s.textContent = rel.tag_name.replace(/^v/, 'v')
+                + (date ? ' · ' + date : '');
+            });
+          })
+          .catch(function () { /* keep static text */ });
+      })();
+    </script>
     <p class="which"><strong>Not sure which Mac you have?</strong> Click the
     Apple menu (top-left corner) → <em>About This Mac</em>. If it says
     “Chip: Apple M1/M2/M3/M4”, choose Apple silicon. If it says “Processor:
