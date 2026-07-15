@@ -200,10 +200,25 @@
         try {
           var p = (navigator.userAgentData && navigator.userAgentData.platform)
             || navigator.platform || '';
-          var el = /mac/i.test(p)
-            ? document.getElementById('dl-mac-arm')
-            : /win/i.test(p) ? document.getElementById('dl-win') : null;
-          if (el) el.classList.add('recommended');
+          if (/win/i.test(p)) {
+            document.getElementById('dl-win').classList.add('recommended');
+          } else if (/mac/i.test(p)) {
+            // navigator.platform is "MacIntel" on BOTH Intel and Apple-
+            // silicon Macs, so it CANNOT pick between the two mac builds
+            // (badging arm64 for everyone sent Intel-Mac users a build that
+            // won't launch — Cam, v0.1.6). Only badge when Chromium's
+            // high-entropy hint proves the chip; otherwise show no badge and
+            // let the "Not sure which Mac?" box do its job.
+            var uad = navigator.userAgentData;
+            if (uad && uad.getHighEntropyValues) {
+              uad.getHighEntropyValues(['architecture']).then(function (v) {
+                var a = v && v.architecture;
+                var el = a === 'arm' ? document.getElementById('dl-mac-arm')
+                  : a === 'x86' ? document.getElementById('dl-mac-intel') : null;
+                if (el) el.classList.add('recommended');
+              }).catch(function () { /* no badge — fail safe */ });
+            }
+          }
         } catch (e) { /* never break the page */ }
         fetch('https://api.github.com/repos/ryannorris14/trillium-studio-releases/releases/latest')
           .then(function (r) { return r.ok ? r.json() : null; })
