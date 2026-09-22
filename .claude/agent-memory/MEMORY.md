@@ -1,0 +1,1 @@
+- [Migration notes](../../MIGRATION.md) — Windows→Linux restore history, release flow, fresh-clone steps

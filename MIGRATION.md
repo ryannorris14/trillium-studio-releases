@@ -125,3 +125,27 @@ a GitHub Actions secret (e.g., a `GITHUB_TOKEN`/PAT with cross-repo release
 permissions) to publish assets here — that secret lives in that repo's
 Actions settings on GitHub, not in any local file, and is out of scope for
 this repo's migration.
+
+## Linux restore (2026-09-21)
+
+Restored onto the new Ubuntu 26.04 desktop (user `ryan`).
+
+- Local path: `/home/ryan/projects/trillium-studio-releases` (was
+  `C:\Users\Ryan Norris\trillium\trillium-studio-releases\` on Windows).
+- Fresh `git clone` over HTTPS from `ryannorris14/trillium-studio-releases`,
+  branch `main` at `c8f6cea`; all 11 tags (`v0.1.0`..`v0.1.10`) came down
+  with the clone. Nothing copied from the Windows backup (no untracked files,
+  no secrets, no prior Claude memory dir existed).
+- Line endings: all tracked files already LF (no CRLF found); no
+  `.gitattributes` needed. No Windows-isms found or fixed.
+- Added `.gitignore` (ignores `.claude/settings.local.json`, `.env*`) and
+  `.claude/agent-memory/MEMORY.md` (Claude auto-memory index, pointing here).
+  `.claude/settings.local.json` sets `autoMemoryDirectory` locally and is
+  not committed.
+- Smoke check: served with `python3 -m http.server`, loaded headless in
+  Google Chrome (`google-chrome --headless=new --dump-dom`): page renders
+  (title "Trillium Studio — Download"), live GitHub API version text
+  populated (`v0.1.10`), and all three `releases/latest/download/*.zip`
+  links resolve with HTTP 200.
+- Sibling private repo `ryannorris14/trillium-studio` (release CI) is
+  restored separately under the `trillium-scheduler` project.
